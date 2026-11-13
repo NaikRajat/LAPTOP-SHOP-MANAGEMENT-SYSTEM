@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SysTech Computer Solutions</title>
+    <meta name="description" content="Full-stack laptop and tech store with customer storefront, certified repairs, cart checkout, and shop-owner admin panel for inventory management, promo codes, and sales analytics." />
+    <meta property="og:title" content="SysTech Computer Solutions" />
+    <meta property="og:description" content="Full-stack laptop and tech store with customer storefront, certified repairs, cart checkout, and shop-owner admin panel for inventory management, promo codes, and sales analytics." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      (function() {
+        try {
+          var keys = ['systech_user', 'systech_token', 'systech_cart', 'systech_theme'];
+          for (var i = 0; i < keys.length; i++) {
+            var val = localStorage.getItem(keys[i]);
+            if (val === 'undefined' || val === 'null') {
+              localStorage.removeItem(keys[i]);
+            }
+          }
+        } catch (e) {}
+        var theme = localStorage.getItem('systech_theme');
+        if (theme === 'dark' || (!theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-[#0a0a0a] dark:text-[#e0e0e0] antialiased selection:bg-cyan-500 selection:text-white min-h-screen transition-colors duration-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

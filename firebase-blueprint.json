@@ -1,0 +1,232 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile with role-based access without credential storage",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "postgresId": { "type": "number", "description": "Mapped PostgreSQL User ID" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "name": { "type": "string", "description": "Full display name" },
+        "phone": { "type": "string", "description": "Phone number" },
+        "role": { "type": "string", "enum": ["OWNER", "ADMIN", "CUSTOMER"], "description": "Authorization role" },
+        "isVerified": { "type": "boolean", "description": "Whether email is verified" },
+        "avatarUrl": { "type": "string", "description": "Profile avatar image URL" },
+        "address": { "type": "string", "description": "Primary formatted address" },
+        "addressLine1": { "type": "string", "description": "Address line 1" },
+        "addressLine2": { "type": "string", "description": "Address line 2" },
+        "city": { "type": "string", "description": "City" },
+        "state": { "type": "string", "description": "State" },
+        "postalCode": { "type": "string", "description": "Postal or PIN code" },
+        "createdAt": { "type": "string", "description": "Creation timestamp ISO" },
+        "updatedAt": { "type": "string", "description": "Last updated timestamp ISO" }
+      },
+      "required": ["uid", "email", "name", "role", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Laptops, accessories, and CCTV catalog item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique product ID" },
+        "slug": { "type": "string", "description": "URL friendly slug" },
+        "title": { "type": "string", "description": "Product display title" },
+        "brand": { "type": "string", "description": "Manufacturer brand" },
+        "model": { "type": "string", "description": "Product model" },
+        "sku": { "type": "string", "description": "Stock keeping unit" },
+        "categoryId": { "type": "string", "description": "Category ID reference" },
+        "price": { "type": "number", "description": "Selling price in INR" },
+        "originalPrice": { "type": "number", "description": "Original MRP price in INR" },
+        "condition": { "type": "string", "enum": ["brand_new", "refurbished"], "description": "Item condition" },
+        "warranty": { "type": "string", "description": "Warranty description" },
+        "rating": { "type": "number", "description": "Product average rating" },
+        "reviewCount": { "type": "number", "description": "Number of customer reviews" },
+        "featured": { "type": "boolean", "description": "Whether highlighted on home page" },
+        "description": { "type": "string", "description": "Product description" },
+        "image": { "type": "string", "description": "Primary product image URL" },
+        "stock": { "type": "number", "description": "Available physical inventory" },
+        "reservedStock": { "type": "number", "description": "Inventory reserved for pending orders" },
+        "lowStockThreshold": { "type": "number", "description": "Alert threshold for restocking" },
+        "createdAt": { "type": "string", "description": "Creation timestamp ISO" },
+        "updatedAt": { "type": "string", "description": "Last updated timestamp ISO" }
+      },
+      "required": ["id", "title", "brand", "sku", "categoryId", "price", "stock"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product category taxonomy",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Category slug / ID" },
+        "name": { "type": "string", "description": "Category display name" },
+        "description": { "type": "string", "description": "Category description" },
+        "icon": { "type": "string", "description": "Lucide icon identifier" },
+        "displayOrder": { "type": "number", "description": "Sorting order" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["id", "name"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Discount coupon promotion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Coupon promo code" },
+        "code": { "type": "string", "description": "Uppercase coupon code" },
+        "description": { "type": "string", "description": "Discount offer explanation" },
+        "discountPercent": { "type": "number", "description": "Percentage discount" },
+        "maxDiscount": { "type": "number", "description": "Maximum discount cap in INR" },
+        "minSpend": { "type": "number", "description": "Minimum order value requirement" },
+        "isActive": { "type": "boolean", "description": "Whether promo is currently redeemable" },
+        "expiresAt": { "type": "string", "description": "Expiration date" },
+        "maxUses": { "type": "number", "description": "Maximum redemptions allowed" },
+        "usedCount": { "type": "number", "description": "Current redemption count" }
+      },
+      "required": ["id", "code", "discountPercent", "isActive"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order with line item snapshot",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Order ID" },
+        "orderNumber": { "type": "string", "description": "Human readable order number" },
+        "userId": { "type": "string", "description": "Firebase Auth UID of customer" },
+        "customerName": { "type": "string", "description": "Customer name" },
+        "customerEmail": { "type": "string", "description": "Customer email" },
+        "customerPhone": { "type": "string", "description": "Customer phone" },
+        "address": { "type": "string", "description": "Fulfillment delivery address" },
+        "fulfillment": { "type": "string", "enum": ["delivery", "in_store_pickup"], "description": "Delivery method" },
+        "subtotal": { "type": "number", "description": "Item subtotal in INR" },
+        "protectionFee": { "type": "number", "description": "Extended warranty fee in INR" },
+        "deliveryFee": { "type": "number", "description": "Shipping fee in INR" },
+        "tax": { "type": "number", "description": "GST amount in INR" },
+        "discount": { "type": "number", "description": "Discount applied in INR" },
+        "promoCodeUsed": { "type": "string", "description": "Coupon code used" },
+        "total": { "type": "number", "description": "Final paid total in INR" },
+        "status": { "type": "string", "enum": ["pending", "processing", "shipped", "delivered", "cancelled"], "description": "Order status" },
+        "paymentStatus": { "type": "string", "enum": ["pending", "paid", "failed", "refunded"], "description": "Payment status" },
+        "paymentMethod": { "type": "string", "description": "Payment method chosen" },
+        "createdAt": { "type": "string", "description": "Order timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["id", "orderNumber", "customerName", "customerEmail", "customerPhone", "total", "status", "paymentStatus"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Payment transaction record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Payment ID" },
+        "orderId": { "type": "string", "description": "Referenced Order ID" },
+        "amount": { "type": "number", "description": "Amount in INR" },
+        "currency": { "type": "string", "description": "Currency code INR" },
+        "method": { "type": "string", "description": "Payment gateway or pickup cash" },
+        "status": { "type": "string", "enum": ["pending", "paid", "failed", "refunded"], "description": "Transaction status" },
+        "razorpayOrderId": { "type": "string", "description": "Razorpay order ID" },
+        "razorpayPaymentId": { "type": "string", "description": "Razorpay payment ID" },
+        "razorpaySignature": { "type": "string", "description": "HMAC SHA256 verified signature" },
+        "transactionRef": { "type": "string", "description": "Payment transaction reference" },
+        "verifiedAt": { "type": "string", "description": "Signature verification timestamp" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["id", "orderId", "amount", "currency", "status"]
+    },
+    "RepairTicket": {
+      "title": "Repair Ticket",
+      "description": "Hardware diagnostics, service and repair tracking",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Repair ticket ID" },
+        "ticketNumber": { "type": "string", "description": "Human readable ticket number" },
+        "userId": { "type": "string", "description": "Associated customer UID" },
+        "customerName": { "type": "string", "description": "Customer name" },
+        "customerPhone": { "type": "string", "description": "Customer phone" },
+        "customerEmail": { "type": "string", "description": "Customer email" },
+        "deviceType": { "type": "string", "description": "Device category" },
+        "deviceBrand": { "type": "string", "description": "Device brand" },
+        "deviceModel": { "type": "string", "description": "Device model" },
+        "issueDescription": { "type": "string", "description": "Customer reported issue" },
+        "urgency": { "type": "string", "enum": ["standard", "express", "critical"], "description": "Priority" },
+        "status": { "type": "string", "enum": ["diagnosing", "waiting_parts", "in_progress", "completed", "delivered", "cancelled"], "description": "Repair status" },
+        "estimatedCost": { "type": "number", "description": "Estimated repair price in INR" },
+        "advancePaid": { "type": "number", "description": "Advance deposit in INR" },
+        "technicianNotes": { "type": "string", "description": "Internal technician notes" },
+        "pickupOrDropoff": { "type": "string", "enum": ["pickup", "dropoff"], "description": "Handling type" },
+        "createdAt": { "type": "string", "description": "Ticket creation date" },
+        "updatedAt": { "type": "string", "description": "Last update date" }
+      },
+      "required": ["id", "ticketNumber", "customerName", "customerPhone", "deviceType", "status"]
+    },
+    "ContactInquiry": {
+      "title": "Contact Inquiry",
+      "description": "Customer inquiry message from store contact form",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Inquiry ID" },
+        "name": { "type": "string", "description": "Sender name" },
+        "email": { "type": "string", "format": "email", "description": "Sender email" },
+        "phone": { "type": "string", "description": "Sender phone number" },
+        "subject": { "type": "string", "description": "Message subject" },
+        "message": { "type": "string", "description": "Message content" },
+        "status": { "type": "string", "enum": ["unread", "read", "resolved"], "description": "Inquiry status" },
+        "createdAt": { "type": "string", "description": "Submission timestamp" }
+      },
+      "required": ["id", "name", "email", "message", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notification alert",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Notification ID" },
+        "userId": { "type": "string", "description": "Target user UID" },
+        "title": { "type": "string", "description": "Notification title" },
+        "message": { "type": "string", "description": "Notification message" },
+        "type": { "type": "string", "enum": ["order", "repair", "promotion", "system"], "description": "Category" },
+        "isRead": { "type": "boolean", "description": "Whether opened" },
+        "createdAt": { "type": "string", "description": "Notification timestamp" }
+      },
+      "required": ["id", "title", "message", "isRead"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user accounts and profile data"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Stores store inventory catalog items"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Stores product taxonomy and navigational categories"
+    },
+    "/coupons/{couponId}": {
+      "schema": "Coupon",
+      "description": "Stores promotional discount codes and redemptions"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Stores customer purchase orders and fulfillment status"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Stores payment verification and transaction records"
+    },
+    "/repairs/{repairId}": {
+      "schema": "RepairTicket",
+      "description": "Stores device service, diagnostics, and repair tracking"
+    },
+    "/contact_inquiries/{inquiryId}": {
+      "schema": "ContactInquiry",
+      "description": "Stores inquiries submitted through the contact page"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Stores notifications for customers and administrators"
+    }
+  }
+}

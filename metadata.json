@@ -1,0 +1,6 @@
+{
+  "name": "SysTech Computer Solutions",
+  "description": "Full-stack laptop and tech store with customer storefront, certified repairs, cart checkout, and shop-owner admin panel for inventory management, promo codes, and sales analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
